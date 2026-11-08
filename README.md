@@ -1,54 +1,48 @@
-# AI Rulebook V3 — Universal Development Standard
+# AI Rulebook V3 — Universal
 
-AI Rulebook adalah pusat instruksi untuk AI coding assistant yang bekerja pada berbagai jenis aplikasi dan sistem perangkat lunak.
+AI Rulebook adalah pusat instruksi dan standar kerja untuk AI coding assistant pada **semua jenis aplikasi**. V3 menggunakan **Universal + Auto Detection** dan **Risk-Based Approval** dengan prinsip ketat tetapi fleksibel.
 
 ## Keputusan V3
-- **Platform:** Universal + Auto Detection.
-- **Approval:** Risk-Based Approval.
-- **Release:** V3.
-- **Prinsip:** aturan keamanan wajib, standar teknis dapat disesuaikan dengan konteks, dan tindakan berisiko dikendalikan dengan persetujuan.
+- **Platform:** Universal; deteksi otomatis satu atau lebih platform.
+- **Approval:** Risk-based — LOW, MEDIUM, HIGH, CRITICAL.
+- **Target:** V3 major release.
+- **Aturan inti:** selalu berlaku; aturan platform hanya dimuat jika relevan.
+
+## Cakupan
+Android, iOS, web, backend, desktop, cross-platform, API/integrasi, database, cloud, dan CI/CD. Teknologi lain tetap dicakup oleh aturan inti dan dokumentasi resmi ekosistemnya.
 
 ## Mulai menggunakan
-1. Berikan AI akses ke repository proyek.
-2. Minta AI membaca `AGENTS.md` atau `CLAUDE.md`, seluruh aturan `core/`, dan profil proyek jika tersedia.
-3. AI memeriksa struktur repository dan mendeteksi stack secara otomatis.
-4. AI memuat aturan platform yang relevan dari `platforms/`.
-5. AI membuat rencana, klasifikasi risiko, implementasi, pengujian, dan laporan.
+1. Minta AI memeriksa repository, status kerja, instruksi, manifest, lockfile, build system, dan CI sebelum mengubah apa pun.
+2. Muat `core/` dan `core/RISK_POLICY.md`.
+3. Deteksi semua platform yang relevan, lalu muat aturan di `platforms/<platform>/RULES.md`.
+4. Ikuti workflow di `workflows/` dan isi `templates/project-profile.yml` bila berguna.
+5. Jalankan validasi yang benar-benar tersedia dan laporkan status dengan bukti.
+
+Prompt awal:
+
+> Baca AI Rulebook V3 dari https://github.com/andikune-ux/ai-rulebook. Audit repository dan deteksi otomatis semua platform, bahasa, framework, build system, database, serta target deployment. Terapkan seluruh aturan core dan risk-based approval, lalu muat hanya aturan platform yang relevan. Sebelum perubahan, klasifikasikan risikonya. Jangan lakukan tindakan HIGH/CRITICAL tanpa persetujuan eksplisit. Jangan mengarang hasil test, build, atau deployment.
 
 ## Struktur
-- `core/`: aturan universal yang berlaku untuk semua proyek.
-- `platforms/`: aturan khusus teknologi/platform.
-- `workflows/`: prosedur kerja AI.
-- `templates/`: konfigurasi dan checklist siap pakai.
-- `docs/`: panduan operasional.
-- `scripts/`: utilitas repository.
-- `AGENTS.md` dan `CLAUDE.md`: entry point instruksi AI.
+- `core/`: aturan universal, keamanan, testing, database, release, dan risk policy.
+- `platforms/`: aturan Android, iOS, web, backend, desktop, cross-platform, dan API.
+- `workflows/`: prosedur discovery, development, review, testing, dan deployment.
+- `templates/`: project profile dan laporan pengembangan.
+- `docs/`: panduan implementasi.
 
-## Auto Detection
-AI wajib memeriksa manifest, file konfigurasi, dependency, struktur folder, dan dokumentasi proyek. Jangan menyimpulkan stack hanya dari nama repository. Jika beberapa stack ditemukan, muat semua aturan yang relevan. Jika tidak dikenali, gunakan aturan universal dan nyatakan keterbatasannya.
+## Approval policy
+| Level | Perilaku |
+|---|---|
+| LOW | AI boleh lanjut dan melaporkan |
+| MEDIUM | Boleh lanjut dengan safeguards jika scope jelas; minta approval bila ada ketidakpastian/dampak material |
+| HIGH | Wajib approval eksplisit sebelum tindakan |
+| CRITICAL | Stop, eskalasi, dan minta otorisasi spesifik serta mitigasi |
 
-## Risk-Based Approval
-- **Low:** AI boleh melanjutkan dan menguji.
-- **Medium:** AI boleh melanjutkan jika perubahan dapat dibatalkan, ruang lingkup jelas, dan dampak dijelaskan.
-- **High:** berhenti sebelum tindakan; minta persetujuan eksplisit.
-- **Critical:** jangan lakukan tanpa otorisasi eksplisit dan rencana mitigasi; tolak tindakan yang melanggar hukum, keamanan, atau privasi.
+Jika ragu, gunakan level risiko lebih tinggi. Akses tool bukan persetujuan.
 
-Lihat `core/RISK_POLICY.md`.
+## Legacy Android DEV.ANDIKUNE
+Aturan signing `andikune`, namespace `dev.andikune`, format versi Android, secrets `ANDIKUNE_*`, dan template Gradle/Actions lama adalah **konvensi khusus aplikasi Android DEV.ANDIKUNE**. Itu bukan persyaratan universal dan tidak boleh diterapkan ke aplikasi lain tanpa instruksi pemilik.
 
-## Aturan prioritas
-1. Hukum, keselamatan, privasi, dan keamanan.
-2. Instruksi eksplisit pemilik proyek yang tidak bertentangan dengan tingkat 1.
-3. Aturan universal di `core/`.
-4. Aturan platform di `platforms/`.
-5. Konvensi dan preferensi proyek.
+## Status validasi
+Repository ini adalah rulebook/template, bukan aplikasi dari semua platform. Build dan test platform harus dijalankan di repository aplikasi yang sesuai. Laporkan pemeriksaan yang belum dijalankan sebagai `NOT RUN`, bukan `PASS`.
 
-Jika dua aturan setingkat bertentangan, jelaskan konflik dan pilih opsi paling aman yang tetap memenuhi tujuan. Jangan diam-diam mengabaikan aturan.
-
-## Status pemeriksaan
-Gunakan `PASS`, `FAIL`, `NOT RUN`, atau `NOT APPLICABLE`. Jangan mengklaim build, test, audit, atau deployment berhasil tanpa bukti aktual.
-
-## Batas repository
-Repository ini adalah rulebook dan kumpulan template, bukan aplikasi Android atau aplikasi runnable. Template CI/CD harus disesuaikan dan dipasang pada repository aplikasi yang sesuai.
-
-## Kontribusi
-Baca `CONTRIBUTING.md`. Setiap perubahan aturan harus disinkronkan ke entry point terkait dan dicatat di `CHANGELOG.md`.
+Ikuti `CONTRIBUTING.md` untuk kontribusi dan sinkronisasi dokumentasi.
