@@ -10,3 +10,4 @@
 8. Gunakan dokumentasi resmi untuk API, framework, dan dependency yang berubah.
 9. Jangan menambahkan fitur di luar permintaan tanpa izin.
 10. Laporkan perubahan file dan alasan utamanya.
+11. Saat memperbaiki bug atau beberapa fitur, kerjakan satu fitur aktif sampai perbaikannya, pengujian, dan audit selesai sebelum berpindah ke fitur berikutnya. Ikuti `core/BUGFIX_WORKFLOW.md`; jika terhalang, tandai BLOCKED dan jelaskan alasannya.
