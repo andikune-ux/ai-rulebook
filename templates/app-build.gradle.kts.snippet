@@ -1,0 +1,14 @@
+// Integrasikan ke dalam blok android { defaultConfig { ... } }.
+// Workflow meneruskan kedua nilai ini melalui -PversionName dan -PversionCode.
+val generatedVersionName = providers.gradleProperty("versionName").orNull
+val generatedVersionCode = providers.gradleProperty("versionCode").orNull
+
+defaultConfig {
+    // Pertahankan applicationId, minSdk, targetSdk, dan konfigurasi lain yang sudah ada.
+    versionName = generatedVersionName
+        ?: error("Project property -PversionName wajib disediakan oleh workflow")
+    versionCode = generatedVersionCode?.toIntOrNull()
+        ?: error("Project property -PversionCode wajib berupa integer positif")
+
+    require(versionCode > 0) { "versionCode harus lebih besar dari 0" }
+}
