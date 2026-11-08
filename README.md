@@ -1,34 +1,54 @@
-# AI Rulebook — DEV.ANDIKUNE
+# AI Rulebook V3 — Universal Development Standard
 
-Repository ini adalah pusat aturan dan template untuk AI yang membangun aplikasi Android menggunakan Kotlin, Gradle Kotlin DSL, dan GitHub Actions.
+AI Rulebook adalah pusat instruksi untuk AI coding assistant yang bekerja pada berbagai jenis aplikasi dan sistem perangkat lunak.
 
-## Repository ini
-- Aturan AI: `CLAUDE.md` dan `AGENTS.md`
-- File yang tidak boleh dibaca AI: `.aiignore`
-- Template workflow CI/CD: `templates/workflow-build.yml`
-- Integrasi versi Gradle: `templates/app-build.gradle.kts.snippet`
-- Script versi otomatis: `scripts/generate-version.sh`
-- Panduan build: `docs/BUILD_GUIDE.md`
-- Checklist AI: `docs/AI_CHECKLIST.md`
-- Keamanan: `SECURITY.md`
+## Keputusan V3
+- **Platform:** Universal + Auto Detection.
+- **Approval:** Risk-Based Approval.
+- **Release:** V3.
+- **Prinsip:** aturan keamanan wajib, standar teknis dapat disesuaikan dengan konteks, dan tindakan berisiko dikendalikan dengan persetujuan.
 
-## Cara menggunakan
-Kirim prompt berikut kepada AI:
+## Mulai menggunakan
+1. Berikan AI akses ke repository proyek.
+2. Minta AI membaca `AGENTS.md` atau `CLAUDE.md`, seluruh aturan `core/`, dan profil proyek jika tersedia.
+3. AI memeriksa struktur repository dan mendeteksi stack secara otomatis.
+4. AI memuat aturan platform yang relevan dari `platforms/`.
+5. AI membuat rencana, klasifikasi risiko, implementasi, pengujian, dan laporan.
 
-> Buat aplikasi Android bernama [Nama Aplikasi] menggunakan Kotlin. Sebelum menulis atau mengubah kode, baca seluruh instruksi di https://github.com/andikune-ux/ai-rulebook, terutama AGENTS.md atau CLAUDE.md. Ikuti aturan namespace dev.andikune, signing key andikune, Gradle Kotlin DSL, versioning, validasi, keamanan, dan GitHub Actions. Jangan mengarang konfigurasi atau mengubah file kritis tanpa izin eksplisit. Siapkan build CI agar saya menerima APK Release melalui GitHub Releases.
+## Struktur
+- `core/`: aturan universal yang berlaku untuk semua proyek.
+- `platforms/`: aturan khusus teknologi/platform.
+- `workflows/`: prosedur kerja AI.
+- `templates/`: konfigurasi dan checklist siap pakai.
+- `docs/`: panduan operasional.
+- `scripts/`: utilitas repository.
+- `AGENTS.md` dan `CLAUDE.md`: entry point instruksi AI.
 
-## Setup pada repository aplikasi
-1. Salin instruksi `AGENTS.md` dan/atau `CLAUDE.md` ke repository aplikasi.
-2. Salin `templates/workflow-build.yml` ke `.github/workflows/build-release.yml`.
-3. Integrasikan `templates/app-build.gradle.kts.snippet` ke `app/build.gradle.kts`.
-4. Salin `scripts/generate-version.sh` ke folder `scripts/` dan pastikan executable (`chmod +x`).
-5. Atur GitHub Secrets sesuai `docs/BUILD_GUIDE.md`.
-6. Pastikan repository aplikasi memiliki Gradle Wrapper (`gradlew`, `gradlew.bat`, dan `gradle/wrapper/`).
+## Auto Detection
+AI wajib memeriksa manifest, file konfigurasi, dependency, struktur folder, dan dokumentasi proyek. Jangan menyimpulkan stack hanya dari nama repository. Jika beberapa stack ditemukan, muat semua aturan yang relevan. Jika tidak dikenali, gunakan aturan universal dan nyatakan keterbatasannya.
 
-**Penting:** Repository AI Rulebook ini adalah repository instruksi/template, bukan project Android. Workflow di folder `templates/` tidak berjalan otomatis di repository ini. Workflow harus dipasang pada repository aplikasi.
+## Risk-Based Approval
+- **Low:** AI boleh melanjutkan dan menguji.
+- **Medium:** AI boleh melanjutkan jika perubahan dapat dibatalkan, ruang lingkup jelas, dan dampak dijelaskan.
+- **High:** berhenti sebelum tindakan; minta persetujuan eksplisit.
+- **Critical:** jangan lakukan tanpa otorisasi eksplisit dan rencana mitigasi; tolak tindakan yang melanggar hukum, keamanan, atau privasi.
 
-## Versioning
-Format tag dan versionName adalah `v.{MAJOR}.{DAY}.{RUN}`. `MAJOR` naik berdasarkan bulan, `DAY` mengikuti tanggal Asia/Jakarta, dan `RUN` memakai nomor run GitHub Actions. `versionCode` memakai RUN dari workflow release yang sama sehingga meningkat setiap run workflow tersebut.
+Lihat `core/RISK_POLICY.md`.
 
-## Prinsip
-Keamanan signing key lebih penting daripada memaksakan release. Jika secret hilang, fingerprint berubah, atau build gagal, hentikan publikasi dan jelaskan masalahnya. Jangan pernah membuat signing key pengganti secara otomatis.
+## Aturan prioritas
+1. Hukum, keselamatan, privasi, dan keamanan.
+2. Instruksi eksplisit pemilik proyek yang tidak bertentangan dengan tingkat 1.
+3. Aturan universal di `core/`.
+4. Aturan platform di `platforms/`.
+5. Konvensi dan preferensi proyek.
+
+Jika dua aturan setingkat bertentangan, jelaskan konflik dan pilih opsi paling aman yang tetap memenuhi tujuan. Jangan diam-diam mengabaikan aturan.
+
+## Status pemeriksaan
+Gunakan `PASS`, `FAIL`, `NOT RUN`, atau `NOT APPLICABLE`. Jangan mengklaim build, test, audit, atau deployment berhasil tanpa bukti aktual.
+
+## Batas repository
+Repository ini adalah rulebook dan kumpulan template, bukan aplikasi Android atau aplikasi runnable. Template CI/CD harus disesuaikan dan dipasang pada repository aplikasi yang sesuai.
+
+## Kontribusi
+Baca `CONTRIBUTING.md`. Setiap perubahan aturan harus disinkronkan ke entry point terkait dan dicatat di `CHANGELOG.md`.
