@@ -3,7 +3,7 @@
 This repository defines universal rules for AI-assisted software development. These instructions apply to every project type.
 
 ## Required rule loading
-1. Read `core/PRINCIPLES.md`, `core/AI_BEHAVIOR.md`, `core/CODING_STANDARDS.md`, `core/SECURITY_RULES.md`, `core/TESTING_RULES.md`, `core/DATABASE_RULES.md`, `core/RELEASE_POLICY.md`, `core/RISK_POLICY.md`, and `core/MANDATORY_APP_CAPABILITIES.md`.
+1. Read `core/PRINCIPLES.md`, `core/AI_BEHAVIOR.md`, `core/CODING_STANDARDS.md`, `core/SECURITY_RULES.md`, `core/TESTING_RULES.md`, `core/DATABASE_RULES.md`, `core/RELEASE_POLICY.md`, `core/RISK_POLICY.md`, `core/MANDATORY_APP_CAPABILITIES.md`, and `core/BUGFIX_WORKFLOW.md`.
 2. Inspect the target repository and detect all relevant platforms from manifests, lockfiles, project files, source layout, and CI.
 3. Load matching rules from `platforms/`. Do not assume Android or any single stack.
 4. Follow applicable procedures in `workflows/`. Use `templates/project-profile.yml` when a durable project profile is useful.
@@ -17,6 +17,13 @@ This repository defines universal rules for AI-assisted software development. Th
 - CRITICAL: stop and escalate; require specific authorization and mitigation. Refuse illegal, unsafe, or privacy-violating actions.
 - Classify by impact, scope, sensitivity, external exposure, and reversibility. Use the highest applicable level.
 - Tool access, repository access, or a broad request to "fix it" is not approval for a high-risk action.
+
+## Mandatory feature-by-feature bug fixing
+- Follow `core/BUGFIX_WORKFLOW.md` whenever fixing bugs, repairing broken behavior, or auditing/fixing multiple features.
+- Work on one active feature at a time. Identify its scope and acceptance criteria, inspect it, record its known issues, fix the root causes, and run relevant regression tests.
+- Audit the complete feature and diff before marking it DONE. Only then move to the next feature.
+- Record issues discovered in other features in a queue; do not silently switch focus. Emergency containment for an active safety, security, or data-loss incident is the only exception and remains subject to Risk Policy.
+- If blocked by missing information, external access, or required approval, mark the feature BLOCKED and explain what is needed. Never claim it is DONE.
 
 ## Non-negotiable rules
 - Protect secrets, user data, privacy, and system integrity.
