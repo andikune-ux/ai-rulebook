@@ -18,4 +18,20 @@
 - [ ] Laporkan file berubah, risiko, approval, hasil, bukti, dan masalah tersisa.
 - [ ] Jangan menyatakan SUCCESS jika pemeriksaan wajib gagal atau belum dijalankan.
 
+## Lima kapabilitas wajib aplikasi
+Baca `core/MANDATORY_APP_CAPABILITIES.md`; semua kelompok berikut harus diimplementasikan atau memiliki justifikasi NOT APPLICABLE yang spesifik:
+- [ ] Permission/capability minimum, penjelasan tujuan, dan alur penolakan.
+- [ ] Service/helper/repository/module pendukung dibuat bila dibutuhkan; tidak ada file kosong atau komponen palsu.
+- [ ] Crash recovery: laporan crash sebelumnya muncul pada launch berikutnya, tombol Salin Log dan Kembali tersedia, data sensitif disensor.
+- [ ] Update checker startup: sumber release tepercaya, versi dan changelog, tombol Skip/Nanti/Update dengan semantik tepat, download dan instalasi aman.
+- [ ] Penyimpanan privat terstruktur: folder nama aplikasi, kategori Pembaruan Aplikasi dan Log Crash, format file sesuai kebutuhan, retensi dan perlindungan data.
+
+## Bukti penerimaan
+- [ ] Catat lokasi kode, konfigurasi, dan test untuk setiap kapabilitas.
+- [ ] Uji permission granted/denied.
+- [ ] Uji simulasi crash dan tampilan laporan saat launch berikutnya.
+- [ ] Uji update tersedia/tidak tersedia/offline, Skip, Nanti, Update, download gagal, dan verifikasi artifact.
+- [ ] Uji struktur folder, baca/tulis, file rusak, ruang penyimpanan, dan cleanup.
+- [ ] Laporkan setiap pemeriksaan sebagai PASS, FAIL, NOT RUN, atau NOT APPLICABLE beserta bukti/alasan.
+
 Aturan Android DEV.ANDIKUNE hanya berlaku jika proyek yang dikerjakan memang Android dan pemilik menetapkan identitas tersebut. Lihat platforms/android/RULES.md.
