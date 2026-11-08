@@ -1,0 +1,26 @@
+# Copy to project-profile.yml in the application repository and customize.
+project:
+  name: ""
+  type: "auto" # android, ios, web, backend, desktop, cross-platform, api, other
+  description: ""
+stack:
+  languages: []
+  frameworks: []
+  runtimes: []
+  package_manager: ""
+  database: []
+targets:
+  platforms: []
+  environments: ["development", "staging", "production"]
+quality:
+  test_commands: []
+  lint_commands: []
+  build_commands: []
+security:
+  data_sensitivity: "unknown" # low, moderate, high, regulated, unknown
+  authentication: true
+  handles_secrets: true
+  production_access: false
+policy:
+  approval_mode: "risk-based"
+  protected_paths: []
