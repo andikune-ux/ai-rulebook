@@ -1,6 +1,18 @@
+# Signing keys and secrets
 *.keystore
 *.jks
+*.p12
+*.pfx
+*.pem
+*.key
 .env
+.env.*
+keystore.properties
+local.properties
+secrets/
+.signing/
+
+# Generated build outputs and caches
 build/
 app/build/
 .gradle/
