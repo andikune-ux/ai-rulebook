@@ -7,27 +7,37 @@ AI Rulebook adalah pusat instruksi dan standar kerja untuk AI coding assistant p
 - **Approval:** Risk-based — LOW, MEDIUM, HIGH, CRITICAL.
 - **Target:** V3 major release.
 - **Aturan inti:** selalu berlaku; aturan platform hanya dimuat jika relevan.
+- **Application capabilities:** lima kelompok kapabilitas wajib untuk setiap pembangunan aplikasi, dengan implementasi sesuai platform.
 
 ## Cakupan
 Android, iOS, web, backend, desktop, cross-platform, API/integrasi, database, cloud, dan CI/CD. Teknologi lain tetap dicakup oleh aturan inti dan dokumentasi resmi ekosistemnya.
 
+## Lima kapabilitas wajib aplikasi
+Setiap pembangunan aplikasi wajib mengevaluasi dan mengimplementasikan lima kelompok berikut. Detail lengkap dan kriteria pengecualian ada di [core/MANDATORY_APP_CAPABILITIES.md](core/MANDATORY_APP_CAPABILITIES.md).
+
+1. **Permission:** hanya permission/capability yang diperlukan, dengan penjelasan tujuan dan penanganan penolakan.
+2. **Service/helper:** buat service, helper, repository, atau modul pendukung bila dibutuhkan arsitektur; jangan memaksakan file kosong. Kotlin Android menggunakan `Service.kt` atau `Helper.kt` bila memang sesuai.
+3. **Crash recovery:** deteksi crash sebelumnya saat aplikasi dibuka kembali; tampilkan log dengan tombol Salin Log dan Kembali.
+4. **Update notification:** cek release terbaru saat startup; tampilkan changelog dan tombol Skip, Nanti, Update dengan perilaku yang ditentukan.
+5. **Structured storage:** folder privat bernama aplikasi dengan kategori Pembaruan Aplikasi dan Log Crash serta format file sesuai kebutuhan.
+
 ## Mulai menggunakan
 1. Minta AI memeriksa repository, status kerja, instruksi, manifest, lockfile, build system, dan CI sebelum mengubah apa pun.
-2. Muat `core/` dan `core/RISK_POLICY.md`.
+2. Muat `core/`, termasuk `core/RISK_POLICY.md` dan `core/MANDATORY_APP_CAPABILITIES.md`.
 3. Deteksi semua platform yang relevan, lalu muat aturan di `platforms/<platform>/RULES.md`.
 4. Ikuti workflow di `workflows/` dan isi `templates/project-profile.yml` bila berguna.
 5. Jalankan validasi yang benar-benar tersedia dan laporkan status dengan bukti.
 
 Prompt awal:
 
-> Baca AI Rulebook V3 dari https://github.com/andikune-ux/ai-rulebook. Audit repository dan deteksi otomatis semua platform, bahasa, framework, build system, database, serta target deployment. Terapkan seluruh aturan core dan risk-based approval, lalu muat hanya aturan platform yang relevan. Sebelum perubahan, klasifikasikan risikonya. Jangan lakukan tindakan HIGH/CRITICAL tanpa persetujuan eksplisit. Jangan mengarang hasil test, build, atau deployment.
+> Baca AI Rulebook V3 dari https://github.com/andikune-ux/ai-rulebook. Audit repository dan deteksi otomatis semua platform, bahasa, framework, build system, database, serta target deployment. Terapkan seluruh aturan core, lima kapabilitas wajib aplikasi, dan risk-based approval; muat hanya aturan platform yang relevan. Sebelum perubahan, klasifikasikan risikonya. Jangan lakukan tindakan HIGH/CRITICAL tanpa persetujuan eksplisit. Jangan mengarang hasil test, build, atau deployment.
 
 ## Struktur
-- `core/`: aturan universal, keamanan, testing, database, release, dan risk policy.
+- `core/`: aturan universal, lima kapabilitas wajib, keamanan, testing, database, release, dan risk policy.
 - `platforms/`: aturan Android, iOS, web, backend, desktop, cross-platform, dan API.
 - `workflows/`: prosedur discovery, development, review, testing, dan deployment.
 - `templates/`: project profile dan laporan pengembangan.
-- `docs/`: panduan implementasi.
+- `docs/`: panduan implementasi dan checklist.
 
 ## Approval policy
 | Level | Perilaku |
