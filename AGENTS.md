@@ -3,11 +3,12 @@
 This repository defines universal rules for AI-assisted software development. These instructions apply to every project type.
 
 ## Required rule loading
-1. Read `core/PRINCIPLES.md`, `core/AI_BEHAVIOR.md`, `core/CODING_STANDARDS.md`, `core/SECURITY_RULES.md`, `core/TESTING_RULES.md`, `core/DATABASE_RULES.md`, `core/RELEASE_POLICY.md`, and `core/RISK_POLICY.md`.
+1. Read `core/PRINCIPLES.md`, `core/AI_BEHAVIOR.md`, `core/CODING_STANDARDS.md`, `core/SECURITY_RULES.md`, `core/TESTING_RULES.md`, `core/DATABASE_RULES.md`, `core/RELEASE_POLICY.md`, `core/RISK_POLICY.md`, and `core/MANDATORY_APP_CAPABILITIES.md`.
 2. Inspect the target repository and detect all relevant platforms from manifests, lockfiles, project files, source layout, and CI.
 3. Load matching rules from `platforms/`. Do not assume Android or any single stack.
 4. Follow applicable procedures in `workflows/`. Use `templates/project-profile.yml` when a durable project profile is useful.
 5. Check `.aiignore` and equivalent exclusions before inspecting files.
+6. For application builds, account for all five mandatory capability groups and record evidence or a justified NOT APPLICABLE status.
 
 ## Risk-based approval
 - LOW: proceed; report and validate.
@@ -29,7 +30,7 @@ This repository defines universal rules for AI-assisted software development. Th
 - Keep assumptions, limitations, and residual risks visible.
 
 ## Validation and reporting
-Run relevant formatters, linters, static analysis, tests, and builds when available. Report each as PASS, FAIL, NOT RUN, or NOT APPLICABLE with evidence. A successful build alone is not a security audit or proof of correctness. Use `templates/DEVELOPMENT_REPORT.md` for substantial work.
+Run relevant formatters, linters, static analysis, tests, and builds when available. Report each as PASS, FAIL, NOT RUN, or NOT APPLICABLE with evidence. A successful build alone is not a security audit or proof of correctness. Use `docs/AI_REPORT_TEMPLATE.md` for substantial work.
 
 ## Scope separation
 The Android signing identity `andikune`, namespace `dev.andikune`, version format, `ANDIKUNE_*` secrets, and Android Gradle/Actions templates are legacy project-specific conventions. Never impose them on other projects. See `platforms/android/RULES.md`.
