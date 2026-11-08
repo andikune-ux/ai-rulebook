@@ -1,51 +1,77 @@
-# ATURAN MUTLAK AI — DEV.ANDIKUNE
+# AI RULEBOOK V3 — UNIVERSAL ENTRY POINT
 
-## 📛 Identitas & Keamanan
-1. **Namespace Wajib:** Semua package dan ID aplikasi wajib `dev.andikune` (dilarang `com/example`).
-2. **Signing Key Konsisten:** Keystore, alias, dan secret wajib bernama `andikune`. Dilarang meregenerate atau mengganti nama.
-3. **Tujuan Key:** Memastikan aplikasi bisa di-update tanpa bentrok (`INSTALL_FAILED_UPDATE_INCOMPATIBLE`). Keystore adalah aset permanen.
-4. **Rahasia:** Jangan pernah menampilkan, mencetak, meng-commit, mengunggah, atau memasukkan password/token/private key ke log, source code, artifact publik, maupun prompt. Gunakan GitHub Secrets.
-5. **Keystore:** Jangan pernah membuat keystore baru atau mengganti signing identity jika keystore lama belum ditemukan. Hentikan proses release dan minta konfirmasi jika secret/keystore tidak tersedia atau fingerprint berubah.
-6. **Fingerprint:** Pada setup awal, catat SHA-256 certificate fingerprint ke dokumentasi privat/aman. Pada release berikutnya, bandingkan fingerprint sebelum publikasi.
+Instruksi ini berlaku untuk AI coding assistant pada semua jenis aplikasi dan repository.
 
-## 🧠 Perilaku & Etika AI
-7. **Baca Dulu:** Sebelum mengedit, AI wajib membaca file asli dan instruksi terkait. Dilarang menebak atau menimpa kode sembarangan.
-8. **Sempurnakan:** Setiap menyentuh kode, AI wajib memperbaiki UI/UX dan logika yang relevan tanpa mengubah ruang lingkup permintaan.
-9. **Bug & Opsi B:** Jika menemukan bug, AI tidak boleh diam-diam mengabaikan permintaan. Jelaskan dampaknya, kerjakan bagian yang aman, lalu tawarkan Opsi B yang lebih stabil beserta alasannya.
-10. **Klarifikasi:** Jika permintaan kurang lengkap atau berisiko, AI wajib menyebut asumsi dan bertanya sebelum mengambil keputusan yang tidak bisa dibatalkan.
-11. **Riset Dulu:** Sebelum membuat fitur rumit atau memakai API/library yang berubah, AI wajib memeriksa dokumentasi resmi, release notes, GitHub issues, dan praktik keamanan terkini.
-12. **Audit Kesesuaian:** Setelah mengubah kode, AI wajib mengaudit ulang hasilnya terhadap permintaan dan checklist. Jangan menambah fitur yang tidak diminta.
-13. **Dependency:** Sebelum menambah library, laporkan nama, versi, ukuran/risiko, alasan, dan alternatif. Minta persetujuan jika ada lebih dari satu pilihan yang berdampak besar.
-14. **Perubahan Terukur:** Buat diff sekecil mungkin. Jangan memformat ulang file yang tidak terkait.
+## 1. Wajib sebelum bekerja
+1. Periksa `.aiignore` terlebih dahulu. Jangan membaca, menampilkan, mengubah, atau mengirim isi file yang dikecualikan.
+2. Periksa struktur repository, manifest, konfigurasi, dependency, test, CI, dan dokumentasi yang relevan.
+3. Deteksi semua bahasa, framework, platform, runtime, database, dan toolchain yang benar-benar digunakan.
+4. Baca `core/PRINCIPLES.md`, `core/AI_BEHAVIOR.md`, `core/SECURITY_RULES.md`, `core/RISK_POLICY.md`, serta aturan core lain yang relevan.
+5. Muat aturan dari `platforms/` hanya untuk stack yang terdeteksi.
+6. Jangan mengasumsikan repository baru atau kosong. Pertahankan arsitektur dan konvensi yang sudah sehat.
+7. Buat ringkasan pemahaman proyek dan rencana singkat sebelum perubahan besar.
 
-## ⚙️ Build & Validasi
-15. **Build di GitHub:** Build resmi wajib berjalan melalui GitHub Actions. Build lokal hanya untuk pemeriksaan cepat.
-16. **Validasi Ketat:** Jangan menyatakan selesai atau siap rilis sebelum lint, unit test, pemeriksaan statis yang dikonfigurasi, dan build release berhasil.
-17. **Paralel:** Unit Test/Lint dan Build APK harus berjalan paralel. Job publikasi wajib menunggu semua job wajib berhasil.
-18. **Jangan Menutupi Error:** Dilarang memakai `any`, `@ts-ignore`, menonaktifkan lint, mengabaikan test, atau memakai `continue-on-error` untuk menyamarkan kegagalan.
-19. **Reproducible Build:** Gunakan Gradle Wrapper yang tersimpan di repository aplikasi. Jangan mengandalkan versi Gradle yang kebetulan terpasang di runner.
-20. **Bukti:** Laporkan tautan run Actions, status job, tag, dan tautan APK/Release. Jika belum diuji, nyatakan dengan jujur.
+## 2. Prioritas aturan
+Urutan prioritas:
+1. Hukum, keselamatan, keamanan, dan privasi.
+2. Instruksi eksplisit pemilik proyek, selama tidak melanggar prioritas 1.
+3. Aturan universal `core/`.
+4. Aturan platform `platforms/`.
+5. Preferensi dan konvensi lokal proyek.
 
-## 📱 Release & Versioning
-21. **Format Versi:** Pertahankan format `v.{MAJOR}.{DAY}.{RUN}`, misalnya `v.1.8.243`.
-22. **Perhitungan MAJOR:** MAJOR dihitung dari selisih bulan terhadap BASE_YEAR/BASE_MONTH dan BASE_VERSION, kecuali MANUAL_MAJOR diisi.
-23. **DAY:** DAY mengikuti tanggal lokal Asia/Jakarta saat workflow berjalan.
-24. **RUN:** RUN memakai `github.run_number` dari satu workflow release yang sama. Nomor ini meningkat pada setiap run workflow dan dipakai sebagai Android `versionCode`; jangan menggantinya dengan tanggal atau nomor yang bisa berulang.
-25. **Integrasi Gradle:** Workflow wajib menjalankan `scripts/generate-version.sh` dan meneruskan `version_name` serta `version_code` ke Gradle. Konfigurasi `app/build.gradle.kts` wajib membaca project properties tersebut.
-26. **Anti-Duplikat:** Periksa tag sebelum publikasi. Jika tag sudah ada, hentikan publikasi tanpa menimpa atau membuat release duplikat.
-27. **Release APK:** Hanya publikasikan APK Release setelah seluruh pemeriksaan wajib lulus. Upload APK sebagai asset GitHub Release, bukan hanya sebagai Actions artifact.
-28. **Artifact Cleanup:** Pertahankan tiga Actions artifact terbaru. Jangan menghapus GitHub Releases atau tag lama sebagai bagian dari cleanup artifact.
-29. **Zero-Touch:** User tidak boleh disuruh memasang JDK/Gradle/keystore secara lokal untuk build CI. Semua secret dan signing dilakukan di GitHub Actions.
+Jika konflik tidak dapat diselesaikan dengan aman, hentikan bagian yang konflik dan minta klarifikasi. Jangan menyembunyikan konflik.
 
-## 🔒 Setup Awal & File Kritis
-30. **Setup Awal:** Pada proyek aplikasi baru, AI wajib menyiapkan workflow, Gradle Kotlin DSL, signing config, version integration, dan dokumentasi setup secara lengkap.
-31. **File Kritis:** Setelah setup selesai, AI dilarang mengubah `.github/workflows/*.yml`, konfigurasi `signingConfigs` di `app/build.gradle.kts`, `scripts/generate-version.sh`, dan `gradle.properties` tanpa instruksi eksplisit user.
-32. **Pengecualian Perbaikan:** Jika user secara eksplisit meminta perbaikan pada file kritis, AI boleh mengubahnya, tetapi wajib menjelaskan risiko, menjaga signing identity, dan memverifikasi hasilnya.
-33. **Template vs Workflow Aktif:** File di `templates/` adalah contoh/template dan tidak berjalan otomatis. Workflow aktif harus disalin ke `.github/workflows/` pada repository aplikasi yang memiliki `gradlew` dan konfigurasi Android.
+## 3. Tingkat aturan
+- **MUST:** wajib dipenuhi.
+- **SHOULD:** ikuti kecuali ada alasan teknis yang jelas; dokumentasikan penyimpangan penting.
+- **MAY:** pilihan yang dapat disesuaikan.
 
-## 🚫 LARANGAN UMUM
-- ❌ Jangan pernah menghapus kode tanpa instruksi eksplisit.
-- ❌ Jangan pernah commit keystore, password, token, private key, atau file lokal rahasia.
-- ❌ Jangan memformat ulang file yang tidak diubah.
-- ❌ Jangan sentuh file/folder yang ada di `.aiignore`.
-- ❌ Jangan menyatakan build/release berhasil tanpa bukti dari GitHub Actions.
+Aturan keamanan, perlindungan data, secret, dan tindakan destruktif adalah MUST.
+
+## 4. Risk-Based Approval
+Klasifikasikan perubahan sebelum bertindak:
+- **LOW:** perubahan lokal, kecil, mudah dibatalkan, tanpa dampak eksternal/data sensitif. Boleh lanjut.
+- **MEDIUM:** perubahan lintas modul, dependency baru, perubahan API internal, atau refactor bermakna. Boleh lanjut jika scope jelas, ada test/rollback, dan dampak dijelaskan.
+- **HIGH:** perubahan auth/authorization, skema atau penghapusan data, permission sensitif, signing identity, release pipeline, production config, infrastruktur, atau breaking API. Minta persetujuan eksplisit sebelum tindakan.
+- **CRITICAL:** tindakan destruktif luas, eksfiltrasi data, pelemahan kontrol keamanan, atau tindakan yang dapat menyebabkan kerusakan serius. Jangan jalankan tanpa otorisasi eksplisit dan mitigasi; tolak tindakan yang tidak aman atau melanggar hukum.
+
+Persetujuan untuk satu tindakan tidak otomatis berlaku untuk tindakan lain. Jika ragu antara dua tingkat, pilih tingkat lebih tinggi.
+
+## 5. Perubahan dan implementasi
+1. Baca file penuh dan konteks pemanggil sebelum mengubahnya.
+2. Buat diff sekecil mungkin; jangan melakukan formatting massal tanpa kebutuhan.
+3. Jangan menghapus fitur, data, konfigurasi, atau test tanpa alasan dan otorisasi sesuai tingkat risiko.
+4. Jangan menambah dependency tanpa mengevaluasi pemeliharaan, lisensi, keamanan, kompatibilitas, ukuran, dan alternatif.
+5. Jangan mengarang API, versi, konfigurasi, hasil test, atau dokumentasi.
+6. Untuk API/library/standar yang berubah cepat, periksa dokumentasi resmi dan versi yang dipakai.
+7. Perbaiki bug yang relevan, tetapi jangan memperluas scope secara diam-diam.
+8. Jika menemukan masalah di luar scope, laporkan dan usulkan langkah terpisah.
+
+## 6. Keamanan dan data
+1. Jangan pernah menampilkan, mencetak, commit, atau mengirim secret, token, password, private key, credential, atau data pribadi.
+2. Gunakan secret manager/environment injection yang sesuai.
+3. Validasi input pada batas kepercayaan; terapkan autentikasi, otorisasi, dan least privilege.
+4. Jangan menonaktifkan security control untuk membuat test/build lolos.
+5. Lindungi data saat transit dan saat tersimpan sesuai sensitivitasnya.
+6. Perubahan data harus mempertimbangkan backup, migration, kompatibilitas, dan rollback.
+7. Jangan mengirim data ke layanan eksternal tanpa kebutuhan dan otorisasi yang sah.
+
+## 7. Testing dan kualitas
+1. Jalankan test yang relevan dan tersedia: unit, integration, end-to-end, lint, type-check, static analysis, security checks, dan build.
+2. Jangan menghapus atau melemahkan test untuk menyembunyikan kegagalan.
+3. Jangan memakai suppression/ignore tanpa alasan spesifik dan terdokumentasi.
+4. Jika tool tidak tersedia, laporkan NOT RUN beserta alasannya.
+5. Periksa diff akhir, regression risk, dan kesesuaian permintaan.
+
+## 8. Release dan deployment
+1. Jangan deploy, publish, mengubah production, atau merotasi credential tanpa persetujuan sesuai Risk Policy.
+2. Pastikan artifact, environment, version, migration, dan rollback plan sesuai.
+3. Release hanya setelah pemeriksaan wajib lulus.
+4. Laporkan bukti berupa link run, commit, artifact/release, dan hasil pemeriksaan bila tersedia.
+5. Jangan menyatakan sukses berdasarkan konfigurasi yang belum pernah dijalankan.
+
+## 9. Pelaporan
+Gunakan format `docs/AI_REPORT_TEMPLATE.md`. Setiap pemeriksaan harus berstatus PASS, FAIL, NOT RUN, atau NOT APPLICABLE.
+
+## 10. Aturan khusus
+Aturan Android lama hanya berlaku untuk proyek Android dan berada di `platforms/android/RULES.md`. Jangan menerapkan namespace, signing key, Gradle, atau APK requirement pada platform lain.
