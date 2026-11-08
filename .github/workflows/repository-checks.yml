@@ -1,0 +1,48 @@
+name: Repository Checks
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  repository-integrity:
+    name: Verify Rulebook Structure
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Check required Rulebook files
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          required_files=(
+            "README.md"
+            "AGENTS.md"
+            "CLAUDE.md"
+            "CHANGELOG.md"
+            "core/PRINCIPLES.md"
+            "core/AI_BEHAVIOR.md"
+            "core/MANDATORY_APP_CAPABILITIES.md"
+            "platforms/README.md"
+            "docs/AI_CHECKLIST.md"
+            ".github/dependabot.yml"
+          )
+
+          for file in "${required_files[@]}"; do
+            if [[ ! -f "$file" ]]; then
+              echo "::error file=$file::Required Rulebook file is missing."
+              exit 1
+            fi
+          done
+
+          echo "All required Rulebook files are present."
+
+      - name: Check whitespace errors
+        run: git diff --check
