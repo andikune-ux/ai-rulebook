@@ -1,26 +1,51 @@
 #!/usr/bin/env bash
 set -euo pipefail
+
 BASE_YEAR=2026
 BASE_MONTH=11
 BASE_VERSION=1
 MANUAL_MAJOR="${MANUAL_MAJOR:-}"
 TZ_NAME="${TZ_NAME:-Asia/Jakarta}"
+
 YEAR=$(TZ="$TZ_NAME" date +%Y)
 MONTH=$((10#$(TZ="$TZ_NAME" date +%m)))
 DAY=$((10#$(TZ="$TZ_NAME" date +%d)))
-if [ -n "$MANUAL_MAJOR" ]; then
+
+if [[ -n "$MANUAL_MAJOR" ]]; then
   MAJOR="$MANUAL_MAJOR"
 else
   MONTHS_SINCE=$(( (YEAR - BASE_YEAR) * 12 + (MONTH - BASE_MONTH) ))
   MAJOR=$(( BASE_VERSION + MONTHS_SINCE ))
 fi
+
+if ! [[ "$MAJOR" =~ ^[1-9][0-9]*$ ]]; then
+  echo "ERROR: MAJOR harus bilangan bulat positif, didapat: $MAJOR" >&2
+  exit 1
+fi
+
+# github.run_number increases for each run of this workflow.
+# Local fallback uses the current git commit count for diagnostics only.
 RUN="${GITHUB_RUN_NUMBER:-$(git rev-list --count HEAD 2>/dev/null || echo 1)}"
+if ! [[ "$RUN" =~ ^[1-9][0-9]*$ ]]; then
+  echo "ERROR: RUN harus bilangan bulat positif, didapat: $RUN" >&2
+  exit 1
+fi
+
 TAG="v.${MAJOR}.${DAY}.${RUN}"
 VERSION_NAME="${MAJOR}.${DAY}.${RUN}"
-VERSION_CODE="${RUN}"
-{
-  echo "tag=${TAG}"
-  echo "version_name=${VERSION_NAME}"
-  echo "version_code=${VERSION_CODE}"
-} >> "${GITHUB_OUTPUT:-/dev/stdout}"
-echo "📦 Versi: ${TAG}"
+# Use the monotonically increasing workflow run number as Android versionCode.
+VERSION_CODE="$RUN"
+
+if [[ -n "${GITHUB_OUTPUT:-}" ]]; then
+  {
+    echo "tag=$TAG"
+    echo "version_name=$VERSION_NAME"
+    echo "version_code=$VERSION_CODE"
+  } >> "$GITHUB_OUTPUT"
+else
+  echo "tag=$TAG"
+  echo "version_name=$VERSION_NAME"
+  echo "version_code=$VERSION_CODE"
+fi
+
+echo "📦 Versi: $TAG (versionCode: $VERSION_CODE)"
