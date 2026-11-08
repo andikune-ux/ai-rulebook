@@ -1,18 +1,43 @@
-# Signing keys and secrets
+# Secrets, credentials, and signing material
 *.keystore
 *.jks
 *.p12
 *.pfx
 *.pem
 *.key
+*.mobileprovision
 .env
 .env.*
+!.env.example
 keystore.properties
 local.properties
 secrets/
 .signing/
+.ssh/
+.aws/
+.azure/
+.gcloud/
 
-# Generated build outputs and caches
+# Generated build outputs and dependency caches
 build/
 app/build/
 .gradle/
+node_modules/
+.next/
+.nuxt/
+.svelte-kit/
+dist/
+out/
+target/
+.venv/
+venv/
+__pycache__/
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+Pods/
+DerivedData/
+coverage/
+.nyc_output/
+*.log
+*.tmp
