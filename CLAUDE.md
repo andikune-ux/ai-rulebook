@@ -1,27 +1,15 @@
-# AI RULEBOOK V3 — UNIVERSAL ENTRY POINT
+# Claude Instructions — AI Rulebook V3
 
-Instruksi ini berlaku untuk AI coding assistant pada semua jenis aplikasi dan repository. Baca `AGENTS.md` sebagai sumber aturan utama; dokumen ini menjadi entry point untuk Claude.
+Follow `AGENTS.md` as the canonical instruction set. Before work, read the universal rules in `core/`, especially `core/RISK_POLICY.md`, detect the actual project stack, and load only the relevant rules from `platforms/`.
 
-## Wajib
-- Inspeksi repository dan `.aiignore` sebelum membaca atau mengedit file.
-- Deteksi stack dari manifest, konfigurasi, dependency, dan struktur nyata; jangan menebak.
-- Baca aturan universal di `core/` dan aturan platform terkait di `platforms/`.
-- Pertahankan arsitektur sehat yang sudah ada dan buat diff sekecil mungkin.
-- Jangan pernah membocorkan atau meng-commit secret, credential, private key, atau data pribadi.
-- Jangan menghapus data, mengubah authentication, signing identity, production, atau infrastruktur berisiko tinggi tanpa persetujuan eksplisit.
-- Jangan menonaktifkan test/security control untuk menyamarkan kegagalan.
-- Jangan mengklaim test/build/deployment berhasil tanpa menjalankannya dan memeriksa hasilnya.
+Use **Universal + Auto Detection**: projects may include multiple platforms or services. Do not assume Android, Kotlin, Gradle, a specific namespace, or a specific signing identity.
 
-## Risk-Based Approval
-- LOW: boleh dikerjakan langsung.
-- MEDIUM: boleh dikerjakan bila scope jelas, perubahan dapat dibatalkan, dan dampak/test dijelaskan.
-- HIGH: wajib meminta persetujuan sebelum bertindak.
-- CRITICAL: wajib berhenti; perlu otorisasi eksplisit dan mitigasi, serta tetap menolak tindakan ilegal atau tidak aman.
+Apply **Risk-Based Approval**:
+- LOW: proceed and report.
+- MEDIUM: proceed with safeguards if scope is clear; ask when impact or uncertainty is material.
+- HIGH: obtain explicit approval before acting.
+- CRITICAL: stop and escalate for specific authorization and mitigation.
 
-Jika ragu, naikkan klasifikasi risiko. Persetujuan harus spesifik terhadap tindakan.
+Protect data and secrets, preserve existing conventions, inspect files before editing, make focused changes, and never fabricate test/build/deployment evidence. Run relevant checks and report PASS, FAIL, NOT RUN, or NOT APPLICABLE.
 
-## Fleksibilitas teknis
-Standar arsitektur, framework, library, dan struktur kode boleh disesuaikan dengan konteks proyek. Penyimpangan dari SHOULD harus memiliki alasan teknis. Aturan MUST terkait keamanan, privasi, integritas data, dan persetujuan tidak dapat dikesampingkan.
-
-## Pelaporan
-Ikuti `docs/AI_REPORT_TEMPLATE.md`. Tandai setiap pemeriksaan PASS, FAIL, NOT RUN, atau NOT APPLICABLE. Lihat `AGENTS.md` untuk kebijakan lengkap.
+Android-specific DEV.ANDIKUNE signing, namespace, versioning, and workflow conventions apply only to projects explicitly using that identity. See `platforms/android/RULES.md`.
