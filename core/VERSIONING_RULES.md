@@ -1,34 +1,39 @@
 # Application Versioning and Release Synchronization
 
-This policy is the source of truth for application version numbers and release publication. It applies to the owner's application repositories when explicitly adopted (including NSiO and Home IO). Do not silently impose it on unrelated projects.
+This policy is adopted for **NSiO only** in this workstream. It does not authorize or require any change to Home IO. Home IO's existing versioning and release behavior must remain untouched unless its owner separately requests a change.
 
-## Required version format
+## Required NSiO version format
 
 Use exactly:
 
-`v.{MAJOR}.{MONTH_CYCLE}.{COMMIT_NUMBER}`
+`v.{MAJOR}.{DAY}.{COMMIT_NUMBER}`
 
-Example: `v.1.1.236`.
+Example: `v.1.13.250`.
 
-- `MAJOR`: persistent application generation. Increase by one only for a substantial application-wide redesign, architectural overhaul, or major feature expansion. It may also be increased deliberately by the owner. A month change alone MUST NOT increase MAJOR.
-- `MONTH_CYCLE`: a persistent sequential month-cycle counter. It is NOT the calendar month number and MUST NOT reset in January. The owner-defined starting baseline is November 2026 = cycle 1; December 2026 = cycle 2; January 2027 = cycle 3; February 2027 = cycle 4, and so on. Advance exactly once for each new calendar month in Asia/Jakarta, even if no build ran during the month. If multiple months elapsed since the stored baseline, advance by the number of elapsed month boundaries. A major-version increase does not reset this counter.
-- `COMMIT_NUMBER`: the monotonically increasing ordinal of the source commit in the target repository's intended mainline history (for example, commit #236 gives 236). It is not a GitHub Actions run number, workflow attempt, timestamp, or arbitrary tag suffix. Resolve it from full, non-shallow Git history or an explicitly maintained monotonic commit counter. Never silently fall back to run_number or a shallow clone count.
+- `MAJOR`: persistent application generation. It increases by **one for each independent trigger**:
+  1. Each calendar-month boundary in Asia/Jakarta.
+  2. Each intentional substantial application-wide redesign, architectural overhaul, or major feature expansion.
+  If both triggers occur, count both: increase MAJOR by **two**. Do not collapse simultaneous triggers into one increment. If multiple month boundaries elapsed, count each elapsed boundary. A major-change increment requires an intentional, documented decision by the owner; do not infer it from file count or commit-message keywords.
+- `DAY`: the current day of the month in Asia/Jakarta, from 1 through 31. It is a real-time calendar date component, not a month number, month-cycle counter, build number, or commit count. It changes automatically when the local date changes.
+- `COMMIT_NUMBER`: the monotonically increasing ordinal of the source commit in NSiO's intended mainline history. Each new commit advances it by one. It is not a GitHub Actions run number, workflow attempt, timestamp, or arbitrary tag suffix. Resolve it from full, non-shallow Git history or an explicitly maintained monotonic commit counter. Never silently fall back to a shallow clone count.
 
 All three components must be numeric and match the exact same source commit used to build the APK.
 
 ## Persistence and determinism
 
-- Persist the major baseline and month-cycle baseline/state in a tracked, reviewable version-state file or another durable repository-owned source. Do not derive MAJOR from the current month.
-- Use the Asia/Jakarta calendar boundary for month-cycle transitions.
-- Re-running a workflow for the same commit and same version-state MUST produce the same version. A rerun must not consume another commit number or month cycle.
-- If a build happens after one or more month boundaries, calculate the cycle from the persisted last-accounted month and advance for each elapsed boundary exactly once. Update the persisted state deterministically; avoid concurrent jobs racing to update it.
-- A major increment requires an intentional change to the persisted major value with a commit/release note explaining the substantial change. Do not infer a major bump from arbitrary file count or commit message keywords.
+- Persist the current MAJOR baseline, last-accounted calendar month, and any pending/recorded intentional major-change increment in a tracked, reviewable NSiO version-state file or another durable repository-owned source.
+- Use the Asia/Jakarta calendar boundary for month transitions. Every new calendar month increments MAJOR by one, even if no build ran during that month. If multiple month boundaries elapsed, increment once per elapsed boundary.
+- Count an intentional substantial redesign/architecture/major-feature trigger independently from month transitions. If both are due for the same release, apply both increments (+2).
+- The DAY component is computed from the current Asia/Jakarta date at build/version evaluation time.
+- Re-running a workflow for the same commit and same effective date/state MUST produce the same version. A rerun must not consume another commit number or re-apply a previously recorded major-change trigger.
+- Serialize state updates or use deterministic state transitions to prevent concurrent workflows from double-counting month or major-change increments.
+- Never derive MAJOR from DAY. Never reset MAJOR at a year boundary.
 
 ## Android version fields and tags
 
-- `versionName` MUST equal the tag without the leading `v.`, e.g. tag `v.1.3.238` maps to `versionName = "1.3.238"`.
-- Android `versionCode` MUST be a monotonically increasing integer derived from the same commit ordinal, with a documented collision-safe encoding if the platform's integer constraints require one. Never use a lower or reused versionCode for a newer published build.
-- The Git tag MUST be exactly `v.{MAJOR}.{MONTH_CYCLE}.{COMMIT_NUMBER}` and point to the exact commit used for the APK.
+- `versionName` MUST equal the tag without the leading `v.`, e.g. tag `v.2.13.251` maps to `versionName = "2.13.251"`.
+- Android `versionCode` MUST be a monotonically increasing integer derived from the same commit ordinal, with a documented collision-safe encoding if platform integer constraints require it. Never use a lower or reused versionCode for a newer published build.
+- The Git tag MUST be exactly `v.{MAJOR}.{DAY}.{COMMIT_NUMBER}` and point to the exact commit used for the APK.
 - The APK manifest/build metadata, Git tag, GitHub Release title, release notes, update-check API response, and in-app displayed version MUST agree.
 
 ## Build and release publication gate
@@ -46,22 +51,23 @@ All three components must be numeric and match the exact same source commit used
 
 | Event | Version |
 |---|---|
-| November 2026, commit #236 | `v.1.1.236` |
-| Another commit in November, #237 | `v.1.1.237` |
-| December 2026, #238 | `v.1.2.238` |
-| January 2027, #239 | `v.1.3.239` |
-| Major overhaul in January, #240 | `v.2.3.240` |
-| February 2027, #241 | `v.2.4.241` |
+| November 13, 2026, MAJOR 1, commit #250 | `v.1.13.250` |
+| New commit on November 13, #251 | `v.1.13.251` |
+| November 14, #252 | `v.1.14.252` |
+| December 1 month boundary, #253 | `v.2.1.253` |
+| Substantial redesign on December 1, #254 | `v.3.1.254` |
+| A month boundary and a substantial redesign are both applied together | MAJOR increases by two, e.g. `v.4.1.255` if the prior MAJOR was 2 |
 
 ## Mandatory verification report
 
-For every versioning/release change, report:
-1. major, month-cycle, and commit-number inputs;
-2. computed tag, versionName, and versionCode;
-3. source commit SHA;
-4. test/lint/build conclusions;
-5. release tag target SHA and attached APK provenance;
-6. whether a newer successful commit exists;
-7. update-checker consistency.
+For every NSiO versioning/release change, report:
+1. prior MAJOR, elapsed month boundaries, intentional major-change triggers, and resulting MAJOR;
+2. Asia/Jakarta date and computed DAY;
+3. commit-number input and computed tag, versionName, and versionCode;
+4. source commit SHA;
+5. test/lint/build conclusions;
+6. release tag target SHA and attached APK provenance;
+7. whether a newer successful commit exists;
+8. update-checker consistency.
 
 Never claim a release is current unless these facts have been verified.
