@@ -71,5 +71,11 @@ Gunakan direktori internal privat aplikasi, bukan root shared storage. Struktur 
 - Perhatikan accessibility, responsive layouts, memory leaks, dan battery impact.
 - Gunakan migration database yang aman dan uji upgrade dari versi sebelumnya.
 
-## Legacy DEV.ANDIKUNE release
-Format versioning `v.{MAJOR}.{DAY}.{RUN}`, secrets `ANDIKUNE_*`, dan workflow `templates/workflow-build.yml` adalah konvensi legacy khusus aplikasi Android DEV.ANDIKUNE. Jangan terapkan ke platform atau aplikasi lain tanpa instruksi pemilik.
+## Application versioning and release
+- For NSiO and Home IO, follow `core/VERSIONING_RULES.md` exactly: `v.{MAJOR}.{MONTH_CYCLE}.{COMMIT_NUMBER}`.
+- Do not use the old `v.{MAJOR}.{DAY}.{RUN}` convention, calendar day, or GitHub Actions run number for these applications.
+- Ensure release publication is synchronized to the latest successful eligible commit; a failed build must never replace the last known-good release.
+- Other Android projects may use their own versioning policy unless the owner explicitly adopts this one.
+
+## Legacy DEV.ANDIKUNE signing
+Secrets `ANDIKUNE_*`, signing identity, namespace, and related Gradle conventions are project-specific. Never impose them on other projects.
