@@ -72,10 +72,12 @@ Gunakan direktori internal privat aplikasi, bukan root shared storage. Struktur 
 - Gunakan migration database yang aman dan uji upgrade dari versi sebelumnya.
 
 ## Application versioning and release
-- For NSiO and Home IO, follow `core/VERSIONING_RULES.md` exactly: `v.{MAJOR}.{MONTH_CYCLE}.{COMMIT_NUMBER}`.
-- Do not use the old `v.{MAJOR}.{DAY}.{RUN}` convention, calendar day, or GitHub Actions run number for these applications.
-- Ensure release publication is synchronized to the latest successful eligible commit; a failed build must never replace the last known-good release.
-- Other Android projects may use their own versioning policy unless the owner explicitly adopts this one.
+
+- NSiO alone adopts `core/VERSIONING_RULES.md` with format `v.{MAJOR}.{DAY}.{COMMIT_NUMBER}`.
+- In NSiO, MAJOR increments independently for every Asia/Jakarta calendar-month boundary and every intentional substantial application overhaul/major feature expansion. If both triggers occur, increment MAJOR twice.
+- DAY is the real-time day-of-month (1–31) in Asia/Jakarta. COMMIT_NUMBER is NSiO's monotonic mainline commit ordinal, never a GitHub Actions run number.
+- This rule does **not** authorize changes to Home IO. Preserve Home IO's current version format, Gradle configuration, workflows, tags, releases, and updater behavior unchanged unless separately requested.
+- Ensure NSiO release publication is synchronized to the latest successful eligible commit; a failed build must never replace the last known-good release.
 
 ## Legacy DEV.ANDIKUNE signing
 Secrets `ANDIKUNE_*`, signing identity, namespace, and related Gradle conventions are project-specific. Never impose them on other projects.
