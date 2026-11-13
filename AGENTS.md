@@ -3,7 +3,7 @@
 This repository defines universal rules for AI-assisted software development. These instructions apply to every project type.
 
 ## Required rule loading
-1. Read `core/PRINCIPLES.md`, `core/AI_BEHAVIOR.md`, `core/CODING_STANDARDS.md`, `core/SECURITY_RULES.md`, `core/TESTING_RULES.md`, `core/DATABASE_RULES.md`, `core/RELEASE_POLICY.md`, `core/RISK_POLICY.md`, `core/MANDATORY_APP_CAPABILITIES.md`, and `core/BUGFIX_WORKFLOW.md`.
+1. Read `core/PRINCIPLES.md`, `core/AI_BEHAVIOR.md`, `core/CODING_STANDARDS.md`, `core/SECURITY_RULES.md`, `core/TESTING_RULES.md`, `core/DATABASE_RULES.md`, `core/RELEASE_POLICY.md`, `core/VERSIONING_RULES.md`, `core/RISK_POLICY.md`, `core/MANDATORY_APP_CAPABILITIES.md`, and `core/BUGFIX_WORKFLOW.md`.
 2. Inspect the target repository and detect all relevant platforms from manifests, lockfiles, project files, source layout, and CI.
 3. Load matching rules from `platforms/`. Do not assume Android or any single stack.
 4. Follow applicable procedures in `workflows/`. Use `templates/project-profile.yml` when a durable project profile is useful.
